@@ -1,32 +1,33 @@
 "use client"
 
 import type React from "react"
-
+import { X, Play, Pause, Volume2, VolumeX, ArrowLeft } from "lucide-react"
 import { useState, useRef, useEffect } from "react"
 import { useIsMobile } from "@/hooks/use-mobile"
-import { Play, Pause, Volume2, VolumeX, ArrowLeft } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
 import Image from "next/image"
+import { Button } from '@/components/ui/button'
 
-// Sample video data with more realistic examples
+// Video data with manually set thumbnail images
 const videoData = [
+
   {
     id: "video1",
-    thumbnail: "/placeholder.svg?height=320&width=560",
-    title: "VASARELY MUSEUM - ART AND SPACE",
-    videoUrl: "https://example.com/video1.mp4",
+    title: "R2D2_fenyelt2-HD",
+    videoUrl: "https://res.cloudinary.com/du988zh3g/video/upload/f_auto:video/s1_scj9tz?_s=vp-2.6.0",
+    thumbnailUrl: "/thumbnails/video2.jpg",
   },
-  {
+    {
     id: "video2",
-    thumbnail: "/placeholder.svg?height=320&width=560",
-    title: "CORPORATE FILM - BRAND STORY",
-    videoUrl: "https://example.com/video2.mp4",
+    title: "Triumph of the Body. Michelangelo and Sixteenth-Century Italian Draughtsmanship",
+    videoUrl: "https://res.cloudinary.com/du988zh3g/video/upload/v1749112221/s2_lwaoxz.mp4",
+    thumbnailUrl: "/thumbnails/video1.jpg",
   },
   {
     id: "video3",
-    thumbnail: "/placeholder.svg?height=320&width=560",
-    title: "CULTURAL EVENT DOCUMENTARY",
-    videoUrl: "https://example.com/video3.mp4",
+    title: "A világ legjobb születésnapi ajándéka",
+    videoUrl: "https://res.cloudinary.com/du988zh3g/video/upload/v1749112304/s3_f8tgm2.mp4",
+    thumbnailUrl: "/thumbnails/video3.jpg",
   },
 ]
 
@@ -35,6 +36,7 @@ export default function HomeSection() {
   const [activeVideo, setActiveVideo] = useState<string | null>(null)
   const [isPlaying, setIsPlaying] = useState(false)
   const [isMuted, setIsMuted] = useState(false)
+  const [showVideo, stShowVideo] = useState(false)
   const [progress, setProgress] = useState(0)
   const videoRef = useRef<HTMLVideoElement>(null)
   const { t } = useLanguage()
@@ -42,12 +44,14 @@ export default function HomeSection() {
   const handleVideoClick = (videoId: string) => {
     setActiveVideo(videoId)
     setIsPlaying(true)
+    stShowVideo(true)
   }
 
   const closeVideo = () => {
     setActiveVideo(null)
     setIsPlaying(false)
     setProgress(0)
+    stShowVideo(false)
   }
 
   const getVideoById = (id: string) => {
@@ -85,7 +89,6 @@ export default function HomeSection() {
     video.currentTime = clickPosition * video.duration
   }
 
-  // Update progress bar as video plays
   useEffect(() => {
     const video = videoRef.current
     if (!video) return
@@ -115,8 +118,6 @@ export default function HomeSection() {
         <Image src="/logo_text.png" alt="Rokosz" width={720} height={720} className="mx-auto" />
       </div>
 
-  
-
       {/* Video Thumbnails */}
       <div className="flex flex-wrap justify-center gap-6 max-w-5xl mx-auto">
         {videoData.map((video) => (
@@ -126,7 +127,7 @@ export default function HomeSection() {
             onClick={() => handleVideoClick(video.id)}
           >
             <img
-              src={video.thumbnail || "/placeholder.svg"}
+              src={video.thumbnailUrl}
               alt={video.title}
               className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300"
             />
@@ -140,11 +141,14 @@ export default function HomeSection() {
         ))}
       </div>
 
-      {/* Modern Video Player Modal */}
-      {activeVideo && (
+      {/* Video Player Modal */}
+      {activeVideo && showVideo && (
         <div className="fixed inset-0 bg-[#111b3f] z-50 flex items-center justify-center">
           <div className="relative w-full h-full">
-            {/* Video */}
+            <Button onClick={closeVideo} className="absolute top-[8vh] right-4 z-20">
+              <X size={20} />
+            </Button>
+
             <div className="absolute inset-0">
               <video
                 ref={videoRef}
@@ -157,7 +161,6 @@ export default function HomeSection() {
               </video>
             </div>
 
-            {/* Back button */}
             <button
               onClick={closeVideo}
               className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors z-20 flex items-center"
@@ -167,44 +170,31 @@ export default function HomeSection() {
               <span className="text-sm uppercase tracking-wider">BACK</span>
             </button>
 
-            {/* Video title */}
             <div className="absolute bottom-16 left-6 flex items-center z-20">
               <div className="w-2 h-2 bg-white rounded-full mr-3"></div>
               <h3 className="text-white text-sm uppercase tracking-wider">{getVideoById(activeVideo)?.title}</h3>
             </div>
 
-            {/* Video Controls */}
             <div className="absolute bottom-0 left-0 right-0 bg-[#111b3f]/50 p-4 z-20">
-              {/* Progress Bar */}
               <div className="w-full h-1 bg-white/30 mb-4 cursor-pointer" onClick={handleProgressClick}>
                 <div className="h-full bg-white" style={{ width: `${progress}%` }}></div>
               </div>
 
               <div className="flex justify-between items-center">
                 <div className="flex items-center space-x-4">
-                  <button
-                    onClick={togglePlay}
-                    className="text-white hover:text-gray-300 transition-colors"
-                    aria-label={isPlaying ? "Pause" : "Play"}
-                  >
+                  <button onClick={togglePlay} className="text-white hover:text-gray-300 transition-colors">
                     {isPlaying ? <Pause size={24} /> : <Play size={24} />}
                   </button>
-
-                  <button
-                    onClick={toggleMute}
-                    className="text-white hover:text-gray-300 transition-colors"
-                    aria-label={isMuted ? "Unmute" : "Mute"}
-                  >
+                  <button onClick={toggleMute} className="text-white hover:text-gray-300 transition-colors">
                     {isMuted ? <VolumeX size={24} /> : <Volume2 size={24} />}
                   </button>
                 </div>
-
                 <div className="text-white text-sm">
                   {videoRef.current
                     ? `${Math.floor(videoRef.current.currentTime / 60)}:${Math.floor(videoRef.current.currentTime % 60)
                         .toString()
                         .padStart(2, "0")} / ${Math.floor((videoRef.current.duration || 0) / 60)}:${Math.floor(
-                        (videoRef.current.duration || 0) % 60,
+                        (videoRef.current.duration || 0) % 60
                       )
                         .toString()
                         .padStart(2, "0")}`
@@ -213,7 +203,6 @@ export default function HomeSection() {
               </div>
             </div>
 
-            {/* Play/Pause overlay */}
             <div className="absolute inset-0 flex items-center justify-center z-10 cursor-pointer" onClick={togglePlay}>
               {!isPlaying && (
                 <div className="bg-white/20 rounded-full p-6">

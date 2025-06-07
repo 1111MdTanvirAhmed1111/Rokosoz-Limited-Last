@@ -8,7 +8,7 @@ export default function AboutSection() {
   const { t } = useLanguage()
 
   return (
-    <section className="h-screen flex bg-[#111b3f] my-2 p-6 relative">
+    <section id="about" className="h-screen flex bg-[#111b3f] my-2 p-6 relative">
       {/* Vertical "ABOUT US" text */}
       <div className="hidden md:flex flex-col justify-center items-center border-r border-white/20 pr-6 mr-6">
         <div className="vertical-text -rotate-180  translate translate-y-40  translate-x-2   text-white tracking-widest text-xl font-medium whitespace-nowrap">

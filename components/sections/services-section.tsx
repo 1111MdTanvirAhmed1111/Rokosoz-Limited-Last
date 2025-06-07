@@ -72,7 +72,7 @@ export default function ServicesSection() {
   }
 
   return (
-    <section className="h-screen flex bg-[#111b3f] p-0 relative">
+    <section id="services" className="h-screen flex bg-[#111b3f] p-0 relative">
       {/* Vertical "SERVICES" text */}
       <div className="hidden md:flex flex-col justify-center items-center border-r border-white/20 px-6">
         <div className="vertical-text -rotate-180 translate translate-y-40 translate-x-2 text-white tracking-widest text-xl font-medium whitespace-nowrap">

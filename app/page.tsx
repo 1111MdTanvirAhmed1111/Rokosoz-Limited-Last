@@ -62,12 +62,13 @@ export default function Home() {
       const distance = targetPosition.current - currentPosition.current
 
       // If we're close enough to the target, snap to it
-      if (Math.abs(distance) < 0.5) {
+      if (Math.abs(distance) < 5) {
         currentPosition.current = targetPosition.current
         scrolling.current = false
       } else {
         // Otherwise, move a percentage of the way there (easing)
-        currentPosition.current += distance * 0.1 * delta
+        // Much higher easing factor for faster navigation to sections
+        currentPosition.current += distance * 0.25 * delta
         scrolling.current = true
       }
 
@@ -252,14 +253,43 @@ export default function Home() {
       setMobileNavOpen(false)
 
       const sectionIndex = SECTIONS.findIndex((section) => section.id === sectionId)
-      if (sectionIndex !== -1 && container.children[sectionIndex]) {
-        const sectionElement = container.children[sectionIndex] as HTMLElement
-        targetPosition.current = sectionElement.offsetLeft
+      if (sectionIndex !== -1) {
+        // Calculate target position - each section is full viewport width
+        const targetPos = sectionIndex * window.innerWidth
 
-        if (!animationFrame) {
-          lastTimestamp = 0
-          animationFrame = requestAnimationFrame(smoothScroll)
+        console.log(`Scrolling to section: ${sectionId}, index: ${sectionIndex}, targetPos: ${targetPos}, currentPos: ${currentPosition.current}`)
+        console.log(`Window width: ${window.innerWidth}, maxScroll: ${maxScrollRef.current}`)
+
+        // Cancel any existing animations
+        if (animationFrame) {
+          cancelAnimationFrame(animationFrame)
+          animationFrame = null
         }
+        if (momentumAnimationFrame) {
+          cancelAnimationFrame(momentumAnimationFrame)
+          momentumAnimationFrame = null
+        }
+
+        // Set both current and target position for immediate jump
+        currentPosition.current = targetPos
+        targetPosition.current = targetPos
+
+        // Apply transform immediately
+        container.style.transform = `translateX(${-targetPos}px)`
+        console.log(`Applied transform: translateX(${-targetPos}px)`)
+
+        // Update scroll progress immediately
+        const progress = maxScrollRef.current > 0 ? targetPos / maxScrollRef.current : 0
+        setScrollProgress(progress)
+        console.log(`Updated progress: ${progress}`)
+
+        // Update active section immediately
+        updateActiveSection()
+
+        // Stop any scrolling animation
+        scrolling.current = false
+
+        console.log(`Scroll completed. New currentPos: ${currentPosition.current}, targetPos: ${targetPosition.current}`)
       }
     }
 

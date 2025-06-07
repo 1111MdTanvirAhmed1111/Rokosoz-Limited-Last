@@ -15,19 +15,19 @@ const videoData = [
     id: "video1",
     title: "R2D2_fenyelt2-HD",
     videoUrl: "https://res.cloudinary.com/du988zh3g/video/upload/f_auto:video/s1_scj9tz?_s=vp-2.6.0",
-    thumbnailUrl: "/thumbnails/video2.jpg",
+    thumbnailUrl: "Alukonighstahl.jpeg",
   },
     {
     id: "video2",
     title: "Triumph of the Body. Michelangelo and Sixteenth-Century Italian Draughtsmanship",
     videoUrl: "https://res.cloudinary.com/du988zh3g/video/upload/v1749112221/s2_lwaoxz.mp4",
-    thumbnailUrl: "/thumbnails/video1.jpg",
+    thumbnailUrl: "FineArts.jpeg",
   },
   {
     id: "video3",
     title: "A világ legjobb születésnapi ajándéka",
     videoUrl: "https://res.cloudinary.com/du988zh3g/video/upload/v1749112304/s3_f8tgm2.mp4",
-    thumbnailUrl: "/thumbnails/video3.jpg",
+    thumbnailUrl: "Alukonighstahl.jpeg",
   },
 ]
 
@@ -112,7 +112,7 @@ export default function HomeSection() {
   }, [activeVideo])
 
   return (
-    <section className="h-screen flex flex-col items-center justify-center p-6 relative">
+    <section id="home" className="h-screen flex flex-col items-center justify-center p-6 relative">
       {/* Logo */}
       <div className="mb-12">
         <Image src="/logo_text.png" alt="Rokosz" width={720} height={720} className="mx-auto" />

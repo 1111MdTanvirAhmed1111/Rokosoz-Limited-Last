@@ -153,7 +153,7 @@ export default function HomeSection() {
               <video
                 ref={videoRef}
                 src={getVideoById(activeVideo)?.videoUrl}
-                className="fixed -z-40 top-0 left-0 h-screen w-screen object-contain"
+                className="w-full h-full object-contain scale-125"
                 autoPlay
                 onClick={togglePlay}
               >

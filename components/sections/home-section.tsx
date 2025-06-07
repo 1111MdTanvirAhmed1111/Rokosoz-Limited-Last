@@ -145,7 +145,7 @@ export default function HomeSection() {
       {activeVideo && showVideo && (
         <div className="fixed inset-0 bg-[#111b3f] z-50 flex items-center justify-center">
           <div className="relative w-full h-full">
-            <Button onClick={closeVideo} className="absolute top-[8vh] right-4 z-20">
+            <Button onClick={closeVideo} className="absolute top-[8vh] right-4 z-50">
               <X size={20} />
             </Button>
 
@@ -153,7 +153,7 @@ export default function HomeSection() {
               <video
                 ref={videoRef}
                 src={getVideoById(activeVideo)?.videoUrl}
-                className="w-full h-full object-contain"
+                className="fixed -z-40 top-0 left-0 h-screen w-screen object-contain"
                 autoPlay
                 onClick={togglePlay}
               >
